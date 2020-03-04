@@ -200,4 +200,15 @@ natančnostjo. Zapišimo desetiško vrednost.
 
     $$0\texttt{x}BF580000 = \underbrace{1}_{Predznak}\overbrace{011\:1111\:0}^{Eksponent}\underbrace{101\:1000\:0000 \cdot  \cdot  \cdot 0}_{Mantisa}$$
 
-    1. 
+    - Predznank
+        * $s=1 \rightarrow$ Število je negativno
+    - Eksponent
+        * $E = 126 \rightarrow e=E-127=-1$ 
+    - Mantisa 
+        - $m = 1011$
+    - Končni rezultat
+        - $$
+            \begin{aligned}
+             (-1)^s\cdot1.m\cdot2^e=-1.1011_{2}\cdot2^{-1} =-0.84375
+            \end{aligned} 
+          $$      
