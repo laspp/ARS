@@ -1,5 +1,9 @@
 # 2. Seštevanje celih števil, Zapis v plavajoči vejici
 
+- [2. Seštevanje celih števil, Zapis v plavajoči vejici](#2-se%c5%a1tevanje-celih-%c5%a1tevil-zapis-v-plavajo%c4%8di-vejici)
+  - [Seštevanje celih števil](#se%c5%a1tevanje-celih-%c5%a1tevil)
+  - [Zapis realnih števil s plavajočo vejico](#zapis-realnih-%c5%a1tevil-s-plavajo%c4%8do-vejico)
+
 ## Seštevanje celih števil
 
 
@@ -119,9 +123,9 @@
 
         Seštevanci sta pozitivna, rezultat je negativen -> $V=1$ -> Rezultat je nepravilen.
 
-## Zapis realnih števil v plavajoči vejici
+## Zapis realnih števil s plavajočo vejico
 
-Zapis v plavajoči vejici v formatu IEEE 754 uporabljamo za predstavitev realnih števil v računalništvu. Obstajaja več formatov zapisov števil v plavajoči vejici. Najpogostojše se uporabljata dva zapisa: 
+Zapis s plavajočo vejico v formatu IEEE 754 uporabljamo za predstavitev realnih števil v računalništvu. Obstajaja več formatov zapisov števil v plavajoči vejici. Najpogostojše se uporabljata dva zapisa: 
 
 - IEEE 754 z enojno natančnostjo (podatkovni tip *float* - 32 bitov):
 

@@ -1,5 +1,9 @@
 # 1. Številski sistemi, binarne predstavitve števil
 
+- [1. Številski sistemi, binarne predstavitve števil](#1-%c5%a0tevilski-sistemi-binarne-predstavitve-%c5%a1tevil)
+  - [Pretvorba med številskimi sistemi](#pretvorba-med-%c5%a1tevilskimi-sistemi)
+  - [Binarne predstavitve celih števil](#binarne-predstavitve-celih-%c5%a1tevil)
+
 ## Pretvorba med številskimi sistemi
 1. **Primer:** desetiško število $149,\!28125_{(10)}$ pretvorimo v dvojiški in šestnajstiški sistem.
    $$
@@ -62,7 +66,7 @@
     149,\!28125_{(10)} = 95,\!48_{(16)}
    $$
 
- 2. **Primer**: $2F\!,8_{(16)}$ pretvorimo v desetiški sistem.
+ 1. **Primer**: $2F\!,8_{(16)}$ pretvorimo v desetiški sistem.
 
     Poljubno število v desetiškem zapisu lahko vedno zapišemo kot vsoto produktov posameznih števk s potencami osnove (10). Potenca osnove pri posamezni števki je odvisna od njenega položaja glede na decimalno vejico. Primer:
     $$
