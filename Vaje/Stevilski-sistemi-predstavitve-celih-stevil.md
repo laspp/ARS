@@ -29,10 +29,10 @@
    * Celi del in decimalni del sedaj združimo in dobimo končni rezultat
     $$
     \begin{aligned}
-    &0,\!28125\times2&=\underline{0},&5625& \vert\\
-    &0,\!5625\times2&=\underline{1},&125& \vert\\
-    &0,\!25\times2&=\underline{0},&5& \vert\\
-    &0,\!5\times2&=\underline{1},&0& \downarrow\\
+    &0,\!28125\cdot2&=\underline{0},&5625& \vert\\
+    &0,\!5625\cdot2&=\underline{1},&125& \vert\\
+    &0,\!25\cdot2&=\underline{0},&5& \vert\\
+    &0,\!5\cdot2&=\underline{1},&0& \downarrow\\
     \end{aligned}
     \\[5pt]
     0,\!28125_{(10)}= 0,\!01001_{(2)}\\[10pt]
@@ -54,8 +54,8 @@
     \\[5pt]
     149_{(10)}= 95_{(16)}\\[10pt]
     \begin{aligned}
-    &0,\!28125\times16&=\underline{4},&5& \vert\\
-    &0,\!5\times2&=\underline{8},&0& \downarrow\\
+    &0,\!28125\cdot16&=\underline{4},&5& \vert\\
+    &0,\!5\cdot2&=\underline{8},&0& \downarrow\\
     \end{aligned}
     \\[5pt]
     0,\!28125_{(10)}= 0,\!48_{(16)}\\[10pt]
@@ -66,15 +66,15 @@
 
     Poljubno število v desetiškem zapisu lahko vedno zapišemo kot vsoto produktov posameznih števk s potencami osnove (10). Potenca osnove pri posamezni števki je odvisna od njenega položaja glede na decimalno vejico. Primer:
     $$
-    125,\!15_{(10)}=1\times10^2+2\times10^1+5\times10^0+1\times10^{-1}+5\times10^{-2}
+    125,\!15_{(10)}=1\cdot10^2+2\cdot10^1+5\cdot10^0+1\cdot10^{-1}+5\cdot10^{-2}
     $$
     Enako lahko naredimo v poljubnem številskem sistemu, le da ustrezno spremenimo osnovo. Če je število zapisano v šestnajstiškem sistemu uporabimo osnovo 16.
     $$
-        2F\!,8_{(16)}= 2\times16^1+F\times16^0+8\times16^{-1}
+        2F\!,8_{(16)}= 2\cdot16^1+F\cdot16^0+8\cdot16^{-1}
     $$ 
     Sedaj lahko zamenjamo šestnajstiške števke z desetiškimi, poračunamo, in dobimo zapis števila v desetiškem sistemu.
     $$
-    2\times16^1+15\times16^0+8\times16^{-1} = 32 + 15 + {1\over2}=47,\!5_{(10)}
+    2\cdot16^1+15\cdot16^0+8\cdot16^{-1} = 32 + 15 + {1\over2}=47,\!5_{(10)}
     $$
 
 **Naloge**
@@ -87,8 +87,8 @@
     Poslužimo se postopka iz primera 2, pri čemer uporabimo osnovo 2.
     $$
         \begin{aligned}
-        1&\times2^5+0\times2^4+0\times2^3+0\times2^2+1\times2^1+0\times2^0 \\
-        &+ 0\times2^{-1}+ 1\times2^{-2}+1\times2^{-3}\\
+        1&\cdot2^5+0\cdot2^4+0\cdot2^3+0\cdot2^2+1\cdot2^1+0\cdot2^0 \\
+        &+ 0\cdot2^{-1}+ 1\cdot2^{-2}+1\cdot2^{-3}\\
         &= 32 + 2 + {1\over4}+{1\over8} = 34,\!375_{(10)}
         \end{aligned}
     $$
@@ -108,7 +108,7 @@
     Vsak posamezen četvorček pretvorimo v šestnajstiško števko in jih združimo.
     $$
     \begin{aligned}
-    1100 &\rightarrow 1\times2^3+1\times2^2+0\times2^1+0\times2^0 =12_{(10)} = C_{(16)}\\
+    1100 &\rightarrow 1\cdot2^3+1\cdot2^2+0\cdot2^1+0\cdot2^0 =12_{(10)} = C_{(16)}\\
     1010 &\rightarrow  10_{(10)} = A_{(16)}\\
     1111 &\rightarrow  15_{(10)} = F_{(16)}\\
     1111 &\rightarrow  15_{(10)} = F_{(16)}\\

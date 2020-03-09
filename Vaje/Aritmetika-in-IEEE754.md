@@ -6,7 +6,7 @@
 
 * ### Prenos in pravilnost rezultata pri seštevanju **nepredznačenih števil**
 
-    Pravilnost rezultata pri seštevanju nepredznačenih števil določa prenos na zadnjem bitu $C_{MSB}$. Če je prenos na zadnjem bitu $C_{MSB}$, enak 0, rezulat je pravilen. Če je prenos enak $C_{MSB}$ rezultat je nepravilen. Nepravilnost rezultata pomeni da je prišlo do preliva (ang. *overflow*), oziroma rezultat se ne da predstaviti s porabljenim številom bitov. Torej:
+    Pravilnost rezultata pri seštevanju nepredznačenih števil določa prenos (*ang. carry*) na najpomembnejšem bitu $C_{MSB}$. Če je prenos $C_{MSB}$ enak 0, je rezulat pravilen. Če je prenos 1, je rezultat nepravilen. V tem primeru se rezultata ne da predstaviti z danim številom bitov. Torej:
 
     $$
    
@@ -45,13 +45,13 @@
         $C_{MSB}$ je enak 1, torej rezultat  ni pravilen.      
 * ### Prenos in pravilnost rezultata pri seštevanju **predznačenih števil**
 
-    Veljavnost rezultat pri seštevanju predznačenih števil določa bit preliva $V$. Če sta oba znaka seštevancev enaka in je znak rezultata različen potem je $V$ enak 1 ter je rezultat nepravilen. Drugače pa je $V=0$ in je rezultat pravilen. Lahko to predstavimo z naslednjo tabelo : 
+    Veljavnost rezultat pri seštevanju predznačenih števil določa bit preliva (*ang. overflow*) $V$. Če sta oba znaka seštevancev enaka in je znak rezultata različen potem je $V$ enak 1 ter je rezultat nepravilen. Drugače pa je $V=0$ in je rezultat pravilen. To lahko predstavimo z naslednjo tabelo : 
 
     
     |  op1 | op2 |   rez    |$V$| 
     |------|-----|----------|---|
-    |   +  |    -|  + ali - | 0 |           
-    |   -  |    +|  + ali - | 0 | 
+    |   +  |    -|  + / -   | 0 |           
+    |   -  |    +|  + / -   | 0 | 
     |   +  |    +|    +     | 0 | 
     |   +  |    +|    -     | 1 | 
     |   -  |    -|    -     | 0 | 
@@ -69,7 +69,7 @@
 
     * **Primer**: Opazujte prenos pri seštevanju 123 in (-123) :
   
-        Pretvorba v dvojiški sistem (Drugi komplement):
+        Pretvorba v dvojiški sistem (Dvojiški komplement):
 
         $$
         \begin{aligned}
@@ -91,7 +91,7 @@
         \end{aligned}\\[10pt]
          $$
 
-        Seštevanci sta pozitivna in je rezultat pozitivan -> $V=0$ -> Rezultat je pravilen čeprav je $C_{MSB} = 1$. Pri seštevanju predznačenih števil upoštevamo samo bit preliva $V$.
+        Seštevanca in rezultat so pozitivni -> $V=0$ -> Rezultat je pravilen čeprav je $C_{MSB} = 1$. Pri seštevanju predznačenih števil upoštevamo samo bit preliva $V$.
 
     * **Primer**: Opazujte prenos pri seštevanju -80 in (-60) :
 
@@ -117,28 +117,28 @@
         \end{aligned}\\[10pt]
          $$
 
-        Seštevanci sta pozitivna in je rezultat negativen -> $V=1$ -> Rezultat je nepravilen.
+        Seštevanci sta pozitivna, rezultat je negativen -> $V=1$ -> Rezultat je nepravilen.
 
 ## Zapis realnih števil v plavajoči vejici
 
-Zapis v plavajoči vejici ali IEEE 754 zapis porabljamo za predstavitvo realnih števil v računalniku. Obstajajo več vrst zapisa v plavajoči vejici. Najpogostojše se uporabljata dva zapisa: 
+Zapis v plavajoči vejici v formatu IEEE 754 uporabljamo za predstavitev realnih števil v računalništvu. Obstajaja več formatov zapisov števil v plavajoči vejici. Najpogostojše se uporabljata dva zapisa: 
 
-- IEEE 754 z enojno natančnosti:
+- IEEE 754 z enojno natančnostjo (podatkovni tip *float* - 32 bitov):
 
   1. Znak - 1 bit 
   2. Eksponent - 8 bitov
-  3. Mantisa ali vzlomljeni del - 23 bitov
+  3. Mantisa - 23 bitov
 
 
 <p align="center">
     <img  src="./figures/IEEE-754-single1.svg" width="500">
 </p>
 
-- IEEE 754 z dvojno natančnosti:
+- IEEE 754 z dvojno natančnostjo (podatkovni tip *double* -  64 bitov):
 
   1. Znak - 1 bit 
   2. Eksponent - 11 bitov
-  3. Mantisa ali vzlomljeni del - 52 bitov
+  3. Mantisa - 52 bitov
 
 
 <p align="center">
@@ -153,7 +153,7 @@ prestavitvi IEEE 754 z enojno natančnostjo.
 
     $$
     \begin{aligned}
-    –210,5937510_{(10)} \rightarrow ?_{(IEEE 754 \: z \: enojno \: natančnosti)}     
+    –210,5937510_{(10)} \rightarrow ?_{(IEEE 754 \: z \: enojno \: natančnostjo)}     
     \end{aligned} \\
     $$ 
 
@@ -167,19 +167,19 @@ prestavitvi IEEE 754 z enojno natančnostjo.
         $$    
 
          To ni IEEE 754 zapis !!!!
-    2. Normalizacija -> Pretvorimo v  zapis ($1.m\cdot2^e$)
+    2. Normalizacija -> Pretvorimo v  zapis ($1,m\cdot2^e$)
         $$
             \begin{aligned}
-             -1101\:0010,1001\:1 = - 1.1010\:0101\:0011 \cdot 2^{7}    
+             -1101\:0010,1001\:1 = - 1,1010\:0101\:0011 \cdot 2^{7}    
             \end{aligned} \\
         $$    
 
-        pri čemu:
+        pri čemer:
          - $m = 1010\:0101\:0011$, 
          - $e = 7$
 
-    3. Zapis v IEEE 754 z enojno natačnosti
-        - Predznak: Število negativno $\rightarrow$ $s = 1_{(2)}$ 
+    3. Zapis v IEEE 754 z enojno natačnostjo
+        - Predznak: Število je negativno $\rightarrow$ $s = 1_{(2)}$ 
         - Eksponent: $E = e + 127 = 134_{(10)} \rightarrow 1000\:0110_{(2)}$
         - Mantisa: $m = 1010\:0101\:0011\:0000\:0000\:000_{(2)}$
   
@@ -196,9 +196,9 @@ natančnostjo. Zapišimo desetiško vrednost.
     \end{aligned} \rightarrow ?_{(10)} \\
     $$    
 
-    Zapišimo podano število v binarnom sistemu:
+    Zapišimo podano število v dvojiškem sistemu:
 
-    $$0\texttt{x}BF580000 = \underbrace{1}_{Predznak}\overbrace{011\:1111\:0}^{Eksponent}\underbrace{101\:1000\:0000 \cdot  \cdot  \cdot 0}_{Mantisa}$$
+    $$0\texttt{x}BF580000 = \underbrace{1}_{Predznak}\overbrace{011\:1111\:0}^{Eksponent}\underbrace{101\:1000\:0000 \cdot \cdot  \cdot 0}_{Mantisa}$$
 
     - Predznank
         * $s=1 \rightarrow$ Število je negativno
@@ -209,6 +209,6 @@ natančnostjo. Zapišimo desetiško vrednost.
     - Končni rezultat
         - $$
             \begin{aligned}
-             (-1)^s\cdot1.m\cdot2^e=-1.1011_{2}\cdot2^{-1} =-0.84375
+             (-1)^s\cdot1,m\cdot2^e=-1.1011_{2}\cdot2^{-1} =-0,84375
             \end{aligned} 
           $$      
