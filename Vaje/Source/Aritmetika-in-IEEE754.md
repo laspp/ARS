@@ -46,7 +46,9 @@
         \end{aligned}\\[10pt]
          $$
 
-        $C_{MSB}$ je enak 1, torej rezultat  ni pravilen.      
+        $C_{MSB}$ je enak 1, torej rezultat  ni pravilen. 
+<div style="page-break-after: always;"></div>
+
 * ### Prenos in pravilnost rezultata pri seštevanju **predznačenih števil**
 
     Veljavnost rezultat pri seštevanju predznačenih števil določa bit preliva (*ang. overflow*) $V$. Če sta oba znaka seštevancev enaka in je znak rezultata različen potem je $V$ enak 1 ter je rezultat nepravilen. Drugače pa je $V=0$ in je rezultat pravilen. To lahko predstavimo z naslednjo tabelo : 
@@ -122,6 +124,8 @@
          $$
 
         Seštevanci sta pozitivna, rezultat je negativen -> $V=1$ -> Rezultat je nepravilen.
+
+#
 
 ## Zapis realnih števil s plavajočo vejico
 
