@@ -338,7 +338,7 @@ natančnostjo. Zapišimo desetiško vrednost.
       $$    
 
 
-  3. Zapis v IEEE 754 z enojno natačnostjo
+  3. Zapis v IEEE 754 z enojno natančnostjo
       - Predznak: Število je negativno $\rightarrow$ $s = 1_{(2)}$ 
       - Eksponent: $E = e + 127 = 133_{(10)} \rightarrow 1000\:0101_{(2)}$
       - Mantisa: $m =0101\:1101\:1011_{(2)}$
@@ -349,7 +349,7 @@ natančnostjo. Zapišimo desetiško vrednost.
 
 * **Naloga**: Zapišite pozitivno neskončno vrednost v šestnajstiškem zapisu v IEEE 754 z dvojno natančnostjo.
 
-    **Rešitev**: Poglejte prosojnice sa predavanja
+    **Rešitev**: Poglejte prosojnice iz predavanj
     
     $+ \infty \rightarrow 0\texttt{x}7FF0\:0000\:0000\:0000_{IEEE 754 \: z \: dvojno \: natančnostjo}$ 
     
@@ -357,7 +357,7 @@ natančnostjo. Zapišimo desetiško vrednost.
 
 * **Naloga**: Katero desetiško vrednost predstavlja $0\texttt{x}FFF1\:0000\:0000\:0000$ v IEEE 754 z dvojno natančnostjo?
  
-    **Rešitev**: Poglejte prosojnice sa predavanja
+    **Rešitev**: Poglejte prosojnice iz predavanja
     
     $0\texttt{x}FFF1\:0000\:0000\:0000_{IEEE 754 \: z \: dvojno \: natančnosti} \rightarrow NaN$ 
     
