@@ -1,6 +1,6 @@
-# 2. Seštevanje celih števil, Zapis v plavajoči vejici
+# 2. Seštevanje celih števil, zapis v plavajoči vejici
 
-- [2. Seštevanje celih števil, Zapis v plavajoči vejici](#2-se%c5%a1tevanje-celih-%c5%a1tevil-zapis-v-plavajo%c4%8di-vejici)
+- [2. Seštevanje celih števil, zapis v plavajoči vejici](#2-se%c5%a1tevanje-celih-%c5%a1tevil-zapis-v-plavajo%c4%8di-vejici)
   - [Seštevanje celih števil](#se%c5%a1tevanje-celih-%c5%a1tevil)
   - [Zapis realnih števil s plavajočo vejico](#zapis-realnih-%c5%a1tevil-s-plavajo%c4%8do-vejico)
 
@@ -36,7 +36,7 @@
         \end{aligned}
         $$ 
 
-        Seštejemo binarni števili po modulu 2 (1+1 = 0 -> prenos v naslednji bit enak 1)
+        Seštejemo binarni števili po modulu 2 (1+1 = 0 -> prenos v naslednji bit je 1)
         $$
         \begin{aligned}
         1011\:1110&\\
@@ -46,12 +46,12 @@
         \end{aligned}\\[10pt]
          $$
 
-        $C_{MSB}$ je enak 0, torej rezultat  je pravilen. 
+        $C_{MSB}$ je enak 0, torej je rezultat pravilen. 
 <div style="page-break-after: always;"></div>
 
 * ### Prenos in pravilnost rezultata pri seštevanju **predznačenih števil**
 
-    Veljavnost rezultat pri seštevanju predznačenih števil določa bit preliva (*ang. overflow*) $V$. Če sta oba predznaka seštevancev enaka in je predznak rezultata različen potem je $V$ enak 1 ter je rezultat nepravilen. Drugače pa je $V=0$ in je rezultat pravilen. To lahko predstavimo z naslednjo tabelo : 
+    Veljavnost rezultat pri seštevanju predznačenih števil določa bit preliva (*ang. overflow*) $V$. Če sta oba predznaka seštevancev enaka in je predznak rezultata različen, potem je $V$ enak 1 in je rezultat nepravilen. Drugače pa je $V=0$ in je rezultat pravilen. To lahko predstavimo z naslednjo tabelo: 
 
     
     |  op1 | op2 |   rez    |$V$| 
@@ -97,11 +97,11 @@
         \end{aligned}\\[10pt]
          $$
 
-        Seštevanca in rezultat so pozitivni -> $V=0$ -> Rezultat je pravilen čeprav je $C_{MSB} = 1$. Pri seštevanju predznačenih števil upoštevamo samo bit preliva $V$.
+        Seštevanca in rezultat so pozitivni -> $V=0$ -> Rezultat je pravilen, čeprav je $C_{MSB} = 1$. Pri seštevanju predznačenih števil upoštevamo samo bit preliva $V$.
 
     * **Primer**: Opazujte prenos pri seštevanju -80 in (-60) :
 
-        Pretvorba v dvojiški sistem (Drugi komplement):
+        Pretvorba v dvojiški sistem (dvojiški komplement):
 
         $$
         \begin{aligned}
@@ -123,10 +123,10 @@
         \end{aligned}\\[10pt]
          $$
 
-        Seštevanci sta pozitivna, rezultat je negativen -> $V=1$ -> Rezultat je nepravilen.
+        Seštevanca sta pozitivna, rezultat je negativen -> $V=1$ -> Rezultat je nepravilen.
 
-    * **Naloge**: Opazujte prenos prenos, preliv in pravilnost rezultata pri seštevanju naslednjih 8-bitnih števil:
-        *  nepredznačenih števil 190 in 70 :
+    * **Naloge**: Opazujte prenos, preliv in pravilnost rezultata pri seštevanju naslednjih 8-bitnih števil:
+        *  nepredznačeni števili 190 in 70 :
 
             Pretvorba v dvojiški sistem:
 
@@ -139,7 +139,7 @@
             \end{aligned}
             $$ 
 
-            Seštejemo binarni števili po modulu 2 (1+1 = 0 -> prenos v naslednji bit enak 1)
+            Seštejemo števili v dvojiškem zapisu po modulu 2 (1+1 = 0 -> prenos v naslednji bit je 1)
             $$
             \begin{aligned}
             1011\:1110&\\
@@ -149,9 +149,9 @@
             \end{aligned}\\[10pt]
             $$
 
-            $C_{MSB}$ je enak 1, torej rezultat  ni pravilen. 
+            $C_{MSB}$ je enak 1, torej rezultat ni pravilen. 
 
-        * predznačenih števil v dvojiškem komplementu 124 in 7
+        * predznačeni števili v dvojiškem komplementu 124 in 7
             Pretvorba v dvojiški sistem:
 
             $$
@@ -163,7 +163,7 @@
             \end{aligned}
             $$ 
 
-            Seštejemo binarni števili po modulu 2 (1+1 = 0 -> prenos v naslednji bit enak 1)
+            Seštejemo števili v dvojiškem zapisu po modulu 2 (1+1 = 0 -> prenos v naslednji bit je 1)
             $$
             \begin{aligned}
             0111\:1100&\\
@@ -173,9 +173,9 @@
             \end{aligned}\\[10pt]
             $$
 
-            Seštevanci sta pozitivna, rezultat je negativen -> $V=1$ -> Rezultat je nepravilen.
+            Seštevanca sta pozitivna, rezultat je negativen -> $V=1$ -> Rezultat je nepravilen.
 
-        * predznačenih števil v dvojiškem komplementu -80 in 60
+        * predznačeni števili v dvojiškem komplementu -80 in 60
   
             Pretvorba v dvojiški sistem:
 
@@ -188,7 +188,7 @@
             \end{aligned}
             $$ 
 
-            Seštejemo binarni števili po modulu 2 (1+1 = 0 -> prenos v naslednji bit enak 1)
+            Seštejemo števili v dvojiškem zapisu po modulu 2 (1+1 = 0 -> prenos v naslednji bit je 1)
             $$
             \begin{aligned}
             1011\:0000&\\
@@ -204,7 +204,7 @@
       * $A = 0\texttt{x}0A63\quad$ 16-bitno predznačeno celo število v zapisu z dvojiškim komplementom
       * $B=\quad0\texttt{x}F4\quad$  8-bitno predznačeno celo število v zapisu z dvojiškim komplementom
 
-      Izračunajte $E = A + (-B)$. Ali je pri seštevanju prišlo do prenosa ali preliva? Število $B$najprej pretvorite v 16-bitno predznačeno celo število. Rezultat $E$ zapišite v šestnajstiški obliki kot 16-bitno predznačeno celo število v dvojiškem komplementu.
+      Izračunajte $E = A + (-B)$. Ali je pri seštevanju prišlo do prenosa ali preliva? Število $B$ najprej pretvorite v 16-bitno predznačeno celo število. Rezultat $E$ zapišite v šestnajstiški obliki kot 16-bitno predznačeno celo število v dvojiškem komplementu.
 
       **Rešitev**:
 
@@ -212,7 +212,7 @@
 
        $$B =????\:????\:\overbrace{1111\:0100}^{0\texttt{x}F4}$$
 
-       Ker je $B$ predznačeno število, namesto zgornjih bitov vstavimo bit predznaka, oziroma razširimo $B$ s bitom predznaka. Ker je $B$ negativno število, namesto $?$ podamo $1$. Torej:
+       Ker je $B$ predznačeno število, namesto zgornjih bitov vstavimo bit predznaka, oziroma razširimo $B$ z bitom predznaka. Ker je $B$ negativno število, namesto $?$ podamo $1$. Torej:
 
        $$B =1111\:1111\:{1111\:0100}=0\texttt{x}FFF4$$
 
@@ -221,17 +221,17 @@
 
        $$-B = \lnot (B)+1 = 0000\:0000\:0000\:1100 $$  
     
-        pri čemu $\lnot (\cdot)$ pomeni invertovanje bitov. Na koncu seštejemo $A + (-B)$
+        pri čemer $\lnot (\cdot)$ pomeni negacijo bitov ($1 -> 0$, $0 -> 1$). Na koncu seštejemo $A + (-B)$
 
         $$E = A+(-B) = 0000\:1010\:0110\:1111_{(2)} = 0\texttt{x}0A6F_{(16)} $$  
 
-        Seštevanca $A$ in $(-B)$ ter rezultat $E$ so pozitivni $\rightarrow$ Rezultat je pravilen
+        Seštevanca $A$ in $(-B)$ ter rezultat $E$ so pozitivni $\rightarrow$ Rezultat je pravilen.
 
 #
 
 ## Zapis realnih števil s plavajočo vejico
 
-Zapis s plavajočo vejico v formatu IEEE 754 uporabljamo za predstavitev realnih števil v računalništvu. Obstajaja več formatov zapisov števil v plavajoči vejici. Najpogostojše se uporabljata dva zapisa: 
+Zapis s plavajočo vejico v formatu IEEE 754 v računalništvu uporabljamo za predstavitev realnih števil. Obstajaja več formatov zapisov števil v plavajoči vejici. Najpogostojše se uporabljata dva zapisa: 
 
 - IEEE 754 z enojno natančnostjo (podatkovni tip *float* - 32 bitov):
 
@@ -256,9 +256,7 @@ Zapis s plavajočo vejico v formatu IEEE 754 uporabljamo za predstavitev realnih
 </p>
 
 
-  * **Primer**: Število –210,5937510 najprej zapišimo v binarni
-obliki s plavajočo vejico, nato pa še šestnajstiško v
-prestavitvi IEEE 754 z enojno natančnostjo.
+  * **Primer**: Število –210,5937510 najprej zapišimo v dvojiški obliki s plavajočo vejico, nato pa še šestnajstiško v prestavitvi IEEE 754 z enojno natančnostjo.
 
 
     $$
@@ -277,7 +275,7 @@ prestavitvi IEEE 754 z enojno natančnostjo.
         $$    
 
          To ni IEEE 754 zapis !!!!
-    2. Dvojiška eksponentna oblika -> Pretvorimo v  zapis ($1,m\cdot2^e$)
+    2. Dvojiška eksponentna oblika -> Pretvorimo v zapis ($1,m\cdot2^e$)
         $$
             \begin{aligned}
              1101\:0010,1001\:1 =  1,1010\:0101\:0011 \cdot 2^{7}    
@@ -353,9 +351,9 @@ natančnostjo. Zapišimo desetiško vrednost.
 
     **Rešitev**: Poglejte prosojnice sa predavanja
     
-    $+ \infty \rightarrow 0\texttt{x}7FF0\:0000\:0000\:0000_{IEEE 754 \: z \: dvojno \: natančnosti}$ 
+    $+ \infty \rightarrow 0\texttt{x}7FF0\:0000\:0000\:0000_{IEEE 754 \: z \: dvojno \: natančnostjo}$ 
     
-    $- \infty \rightarrow 0\texttt{x}FFF0\:0000\:0000\:0000_{IEEE 754 \: z \: dvojno \: natančnosti}$ 
+    $- \infty \rightarrow 0\texttt{x}FFF0\:0000\:0000\:0000_{IEEE 754 \: z \: dvojno \: natančnostjo}$ 
 
 * **Naloga**: Katero desetiško vrednost predstavlja $0\texttt{x}FFF1\:0000\:0000\:0000$ v IEEE 754 z dvojno natančnostjo?
  
@@ -387,7 +385,7 @@ natančnostjo. Zapišimo desetiško vrednost.
   * Zapišemo v IEEE 754
   $$ F= 0\texttt{x}425F\:A000$$
 
-* **Naloga iz izpita 3**: Izračunajte produkt $P = M \cdot N$ dveh realnih števil, zapisanih v 32-bitnem zapisu v plavajoči vejici po standardu IEEE754. Števila pred množenjem zapišite v dvojiški eksponentni obliki brez odmika (primer:  $+1,011\cdot2^{-32}$). Množenje izvedite v dvojiški obliki. Rezultat P zapišite po standardu IEEE754 v šestnajstiškem zapisu.
+* **Naloga iz izpita 3**: Izračunajte produkt $P = M \cdot N$ dveh realnih števil, zapisanih v 32-bitnem zapisu v plavajoči vejici po standardu IEEE 754. Števila pred množenjem zapišite v dvojiški eksponentni obliki brez odmika (primer:  $+1,011\cdot2^{-32}$). Množenje izvedite v dvojiški obliki. Rezultat P zapišite po standardu IEEE 754 v šestnajstiškem zapisu.
   * $M=0\texttt{x}ABCD\:0000\quad$ 
   * $N\,=0\texttt{x}4EB0\:0000\quad$ 
 
