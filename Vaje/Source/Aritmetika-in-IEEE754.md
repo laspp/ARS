@@ -98,7 +98,7 @@
          $$
 
         Seštevanca in rezultat so pozitivni -> $V=0$ -> Rezultat je pravilen, čeprav je $C_{MSB} = 1$. Pri seštevanju predznačenih števil upoštevamo samo bit preliva $V$.
-
+ 
     * **Primer**: Opazujte prenos pri seštevanju -80 in (-60) :
 
         Pretvorba v dvojiški sistem (dvojiški komplement):
@@ -111,7 +111,7 @@
         -60_{(10)} \rightarrow 1100\:0100_{(2)}     
         \end{aligned}
         $$ 
-
+       <br/>
         Seštejemo po modulu 2 
 
         $$
@@ -139,7 +139,7 @@
             \end{aligned}
             $$ 
 
-            Seštejemo števili v dvojiškem zapisu po modulu 2 (1+1 = 0 -> prenos v naslednji bit je 1)
+            Seštejemo števili v dvojiškem zapisu po modulu 2 
             $$
             \begin{aligned}
             1011\:1110&\\
@@ -163,7 +163,7 @@
             \end{aligned}
             $$ 
 
-            Seštejemo števili v dvojiškem zapisu po modulu 2 (1+1 = 0 -> prenos v naslednji bit je 1)
+            Seštejemo števili v dvojiškem zapisu po modulu 2 
             $$
             \begin{aligned}
             0111\:1100&\\
@@ -174,7 +174,7 @@
             $$
 
             Seštevanca sta pozitivna, rezultat je negativen -> $V=1$ -> Rezultat je nepravilen.
-
+      
         * predznačeni števili v dvojiškem komplementu -80 in 60
   
             Pretvorba v dvojiški sistem:
@@ -187,6 +187,12 @@
             \quad60_{(10)} \rightarrow 0011\:1100_{(2)}     
             \end{aligned}
             $$ 
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
 
             Seštejemo števili v dvojiškem zapisu po modulu 2 (1+1 = 0 -> prenos v naslednji bit je 1)
             $$
@@ -388,7 +394,8 @@ natančnostjo. Zapišimo desetiško vrednost.
 * **Naloga iz izpita 3**: Izračunajte produkt $P = M \cdot N$ dveh realnih števil, zapisanih v 32-bitnem zapisu v plavajoči vejici po standardu IEEE 754. Števila pred množenjem zapišite v dvojiški eksponentni obliki brez odmika (primer:  $+1,011\cdot2^{-32}$). Množenje izvedite v dvojiški obliki. Rezultat P zapišite po standardu IEEE 754 v šestnajstiškem zapisu.
   * $M=0\texttt{x}ABCD\:0000\quad$ 
   * $N\,=0\texttt{x}4EB0\:0000\quad$ 
-
+<br/>
+<br/>
    **Rešitev**:
 
      * Zapišemo podani števili v dvojiški eksponentni obliki
