@@ -378,11 +378,11 @@ natančnostjo. Zapišimo desetiško vrednost.
   
   * Zapišemo podani števili v dvojiški eksponentni obliki
 
-  $$C=0\texttt{x}3F58\:0000 \rightarrow 1,011\cdot 2^{-1}$$
+  $$C=0\texttt{x}3F58\:0000 \rightarrow 1,1011\cdot 2^{-1}$$
   $$D=0\texttt{x}425C\:4000 \rightarrow 1,101110001 \cdot 2^{5}$$
 
   * Števili prestavimo na isto potenco
-  $$C= 1,011\cdot 2^{-1}$$
+  $$C= 1,1011\cdot 2^{-1}$$
   $$D= 1101110,0010\cdot 2^{-1}$$
 
   * Števili seštejemo in premaknemo vejico
