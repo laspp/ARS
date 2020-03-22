@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>3. Procesor HIP: ALE ukazi (1. del)</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+    </head>
+    <body class="vscode-light">
+        <h1 id="3-procesor-hip-ale-ukazi-1-del">3. Procesor HIP: ALE ukazi (1. del)</h1>
+<h2 id="uvod">Uvod</h2>
+<p>Aritmetično logična enota (ALE) izvaja operacije ki ih delimo na:</p>
+<ol>
+<li>Aritmetične operacije: seštevanje (+) in odštevanje (-)</li>
+<li>Pomiki: v levo (&lt;&lt;), v desno (&gt;&gt;), logični in aritmetični pomik</li>
+<li>Logične operacije: bitni IN (&amp;), bitni ALI(|), bitni eksluzivni ALI(^), bitna negacija (~)</li>
+<li>set operacije ali operacije primerjanja: enako (=), različno (!=), večje (&gt;), manjše (&lt;)</li>
+</ol>
+<p>V HIP-u so vsi ukazi 3-operandni razen NOT in LHI, ki sta v resnici 2-operandna ter se pri njima eden od treh operandov ignorira. Glede na vrste operandov v ukazu, HIP razlikujeta dve vrsti ukazov:</p>
+<ol>
+<li>Vsi operandi so registri</li>
+<li>En od treh operandov je takojšnji operand ali konstantna vrednost. V tem primeru je takojšnji operand 16-bitna vrednost, oziroma takojšnji operand ne more biti  vrednost večja kot <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mn>16</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{16}-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>. U HIPu ukazi te vrste se imajo črku <strong>I</strong> na zadnjem mestu v imenu ukaza. Na primer ADDI, SLLI itn.</li>
+</ol>
+<!---
+| Ukaz          | Pomen        | Opis                                                                        |
+|---------------|--------------|-----------------------------------------------------------------------------|
+| OP Rd, Rs1, Rs2 | rD <- OP(Rs1,Rs2)  | Prvo se izvaja operacija OP nad registroma Rs1 in Rs2 a potem se rezultat shrani v registar rD |
+| OPI Rd, Rs1, TO | rD <- OP(Rs1,TO) |  Prvo se izvaja operacija OPI nad registrom Rs1 in takojšnjim operandom TO a potem se rezultat shrani v registar rD. TO mora biti 16-bitna vrednost. 
+-->
+<p>Pogosta napaka pri uporabi ALE ukazov je da se ALE ukazi izvajajo nad podatki v pomilniku. ALE ima edino dostop do registrov v CPE-u in ne more dostopati do pomilnika. Pri uporabi ALE ukazov, podatki v pomilniku se morajo najprej naložiti v registre. Potem, ALE lahko dostopa do vrednosti v registrih in izvaja ukaze. Na koncu, ALE shrani rezultat ukaza v en od registrov. Shranjen rezultat se lahko vporabi v drugem ALE ukazu ali se shrani v pomilnik. Predhodno opisan postopek lahko ilustriramo s naslednjo risbo. Recimo da HIP mora izvajati program podan na desni strani risbe. Na desni strani je podana poenostavljana izvedba programa v HIPu. Najprej se podatka na naslovu A in B prenašata iz pomilnika v registra R1 in R20. Potem ALE izvaja ukaz OP nad registri R1 in R20 in shrani rezultat v registar R31. (OP predstavlja poljubni ALE vkaz). Na koncu se rezultat operacije shrani v pomilnik na naslovu C.</p>
+<p align="center">
+    <img  src="file:////home/ratko/Documents/FRI/ARS/Github/ARS/Vaje/Source/figures/ALE.svg" width="1000">
+</p>
+<h2 id="aritmeti%c4%8dne-operacije">Aritmetične operacije</h2>
+<p>HIP lahko izvaja samo celoštevilično seštevanje in odštevanje in ne podpira množenje in delenje. Množenje in delenje se lahko implementirata s pomočjo uporabe potprograma in uporabe podprtih ALE ukazov.</p>
+<h4 id="primeri-za-aritmeti%c4%8dne-vkaze">Primeri za aritmetične vkaze</h4>
+<table>
+<thead>
+<tr>
+<th>Ukaz</th>
+<th>Pomen</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>add r1, r2, r3</td>
+<td>r1 &lt;- r2 + r3</td>
+<td>Vrednosti registra r2 se prišteje vrednost  registra r3 in se rezultat seštevanja shrani v registar r1</td>
+</tr>
+<tr>
+<td>addi r1, r2, 20</td>
+<td>r1 &lt;- r2 + 20</td>
+<td>Vrednosti registra r2 se prišteje število 20 in se rezultat seštevanja shrani v registar r1</td>
+</tr>
+<tr>
+<td>sub r1, r2, r3</td>
+<td>r1 &lt;- r2 - r3</td>
+<td>Od vrednosti v registru r2 se odšteje vrednost registra r3 in se rezultat shrani v r1</td>
+</tr>
+<tr>
+<td>subi r1, r2, 20</td>
+<td>r1 &lt;- r2 - 20</td>
+<td>Od vrednosti v registru r2 se odšteje vrednost 20 in se rezultat shrani v r1</td>
+</tr>
+</tbody>
+</table>
+<p>Opomba: Pri ukazih addi in subi takojšnji operand mora biti 16-bitna vrednost. Kaj se zgodi če se vrednost takojšnji operand zapisati sa 16 bitov? Poglejmo naslednji del kode:</p>
+<pre><code class="language-as"><div>...
+addi r1,r0,<span class="hljs-number">0x12345678</span>
+...
+</div></code></pre>
+<p>Po izvajanju ukaza vrednost registra r1 ne bo enaka 0x12345678 ampak bo enaka 0x00005678. Ukaz addi upošteva samo spodnjih 16 bitov !!!</p>
+<h4 id="nepredzna%c4%8deno-se%c5%a1tavanje-in-od%c5%a1tevanje">Nepredznačeno seštavanje in odštevanje.</h4>
+<p>Ukazi u prejšnjem delu izvajajo predznačeno seštavanje in odštevanje oziroma predpostavljajo da so operandi predznačena števila. V HIPu obstajata tudi nepredznačeno seštevanje i odštevanje. Pri nepredznačenem seštevanju (odštevanju) operandi se posmatrajo kot nepredznačena števila. Poleg tega, obstajata še dve razliki med predznačenim in nepredznačenim seštevanjem (odštevanjem):</p>
+<ol>
+<li>Veljavnost pri predznačenem seštevanju določa bit preliva (<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.22222em;">V</span></span></span></span>) a pri nepredznačenem seštevanju bit prenosa na zadnjem bitu <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>C</mi><mrow><mi>M</mi><mi>S</mi><mi>B</mi></mrow></msub></mrow><annotation encoding="application/x-tex">C_{MSB}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">M</span><span class="mord mathdefault mtight" style="margin-right:0.05764em;">S</span><span class="mord mathdefault mtight" style="margin-right:0.05017em;">B</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></li>
+<li>Pri razširitvi predznaka pri takojšnjem naslavljanju. Pri nepredznačenem seštevanju takojšnji operand se razširja sa ničlami a pri predznačenem sa bitom predznaka.</li>
+</ol>
+<h4 id="primeri-za-nepredzna%c4%8dene-aritmeti%c4%8dne-vkaze">Primeri za nepredznačene aritmetične vkaze</h4>
+<table>
+<thead>
+<tr>
+<th>Ukaz</th>
+<th>Pomen</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>addu r1, r2, r3</td>
+<td>r1 &lt;- r2 + r3</td>
+<td>Nepredznačeno seštavanje registrov r2 in r3 (Pazi zadnjo črko U u mnemoniku ukaza)</td>
+</tr>
+<tr>
+<td>addui r1, r2, 20</td>
+<td>r1 &lt;- r2 + 20</td>
+<td>Nepredznačeno seštavanje registra r2 in takojšnjeg operanda</td>
+</tr>
+<tr>
+<td>subu r1, r2, r3</td>
+<td>r1 &lt;- r2 - r3</td>
+<td>Nepredznačeno odštevanje registra r3 od registra r2</td>
+</tr>
+<tr>
+<td>subui r1, r2, 20</td>
+<td>r1 &lt;- r2 - 20</td>
+<td>Nepredznačeno odštevanje takojšnjeg operanda od registra r2</td>
+</tr>
+</tbody>
+</table>
+<p>Prašanje: Koliko znašata vrednost registra r1 in r2?</p>
+<pre><code class="language-as"><div>...
+addi r1,r0,<span class="hljs-number">-1</span>
+addui r2,r0,<span class="hljs-number">-1</span>
+...
+</div></code></pre>
+<p>Odgovor: r1 = 0xFFFF FFFF in r2 = 0x0000FFFF. Namig: Pretvorite (-1) v 16-bitno binarno vrednost v dvojiškem komplementu.</p>
+<h2 id="pomiki">Pomiki</h2>
+<h4 id="logi%c4%8dni-pomik-v-levo-in-desno">Logični pomik v levo in desno</h4>
+<p>Pomikanje števila v levo strano za <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> mest je ekvivaletno množenjem tega števila s <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">2^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span></span></span></span></span></span></span>. Poglejmo na primeru v katerem 8-bitno število s vrednostjo <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span> pomikamo v levo za dva mesti:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtable rowspacing="0.24999999999999992em" columnalign="right left" columnspacing="0em" rowlines="solid none"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>A</mi><mo>:</mo><mspace width="1em"/><mn>0000</mn><mtext> </mtext><mn>0011</mn><mo>→</mo><mtext> </mtext><mtext> </mtext><mn>3</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>A</mi><mo>&lt;</mo><mo>&lt;</mo><mn>2</mn><mo>:</mo><mspace width="1em"/><mn>0000</mn><mtext> </mtext><mn>1100</mn><mo>→</mo><mn>12</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd></mtr></mtable><mspace linebreak="newline" height="1em"></mspace></mrow><annotation encoding="application/x-tex">\begin{aligned}
+A:\quad 0000\:0011 \rightarrow \,\,3&amp;\\
+\hline\\[-3pt]
+A &lt;&lt; 2:\quad 0000\:1100\rightarrow 12&amp;
+\end{aligned}\\[10pt]
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:4.2em;vertical-align:-1.8500000000000003em;"></span><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.3499999999999996em;"><span style="top:-4.35em;"><span class="pstrut" style="height:4.35em;"></span><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.35em;"><span style="top:-4.51em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mspace" style="margin-right:1em;"></span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">0</span><span class="mord">0</span><span class="mord">1</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span></span></span><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-1.8099999999999998em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mspace" style="margin-right:1em;"></span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">1</span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.8500000000000003em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.35em;"><span style="top:-4.35em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"><span class="mord"></span></span></span><span style="top:-1.65em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"><span class="mord"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.85em;"><span></span></span></span></span></span></span></span><span style="top:-5.199999999999999em;"><span class="pstrut" style="height:4.35em;"></span><span class="hline" style="border-bottom-width:0.05em;"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.8500000000000003em;"><span></span></span></span></span></span></span><span class="mspace newline" style="margin-top:1em;"></span></span></span></span></p>
+<p>Obratno pomikanje števila v desno strano za <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> mest je ekvivaletno delenjem tega števila s <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">2^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span></span></span></span></span></span></span>. Poglejmo na primeru v katerem 8-bitno število s vrednostjo <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>40</mn></mrow><annotation encoding="application/x-tex">40</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">0</span></span></span></span> pomikamo v desni za tri mesta:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtable rowspacing="0.24999999999999992em" columnalign="right left" columnspacing="0em" rowlines="solid none"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>B</mi><mo>:</mo><mspace width="1em"/><mn>0010</mn><mtext> </mtext><mn>1000</mn><mo>→</mo><mn>40</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>B</mi><mo>&gt;</mo><mo>&gt;</mo><mn>3</mn><mo>:</mo><mspace width="1em"/><mn>0000</mn><mtext> </mtext><mn>0011</mn><mo>→</mo><mtext> </mtext><mtext> </mtext><mn>5</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd></mtr></mtable><mspace linebreak="newline" height="1em"></mspace></mrow><annotation encoding="application/x-tex">\begin{aligned}
+B:\quad 0010\:1000 \rightarrow 40&amp;\\
+\hline\\[-3pt]
+B &gt;&gt; 3:\quad 0000\:0011\rightarrow \,\,5&amp;
+\end{aligned}\\[10pt]
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:4.2em;vertical-align:-1.8500000000000003em;"></span><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.3499999999999996em;"><span style="top:-4.35em;"><span class="pstrut" style="height:4.35em;"></span><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.35em;"><span style="top:-4.51em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mspace" style="margin-right:1em;"></span><span class="mord">0</span><span class="mord">0</span><span class="mord">1</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">4</span><span class="mord">0</span></span></span><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-1.8099999999999998em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mspace" style="margin-right:1em;"></span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">0</span><span class="mord">0</span><span class="mord">1</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.8500000000000003em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.35em;"><span style="top:-4.35em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"><span class="mord"></span></span></span><span style="top:-1.65em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"><span class="mord"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.85em;"><span></span></span></span></span></span></span></span><span style="top:-5.199999999999999em;"><span class="pstrut" style="height:4.35em;"></span><span class="hline" style="border-bottom-width:0.05em;"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.8500000000000003em;"><span></span></span></span></span></span></span><span class="mspace newline" style="margin-top:1em;"></span></span></span></span></p>
+<h4 id="primeri-za-ukaze-logi%c4%8dnih-pomikov">Primeri za ukaze logičnih pomikov</h4>
+<table>
+<thead>
+<tr>
+<th>Ukaz</th>
+<th>Pomen</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sll r1, r2, r3</td>
+<td>r1 &lt;- r2 &lt;&lt; r3</td>
+<td>Vrednost registra r2 se pomika r3 mest v levo in se rezultat shrani v registar r1</td>
+</tr>
+<tr>
+<td>slli r1, r2, 5</td>
+<td>r1 &lt;- r2 &lt;&lt; 5</td>
+<td>Vrednost registra r2 se pomika 5 mest v levo in se rezultat shrani v registar r1</td>
+</tr>
+<tr>
+<td>srl r1, r2, r3</td>
+<td>r1 &lt;- r2 &gt;&gt; r3</td>
+<td>Vrednost registra r2 se pomika r3 mest v desno in se rezultat shrani v registar r1</td>
+</tr>
+<tr>
+<td>srli r1, r2, 5</td>
+<td>r1 &lt;- r2 &gt;&gt; 5</td>
+<td>Vrednost registra r2 se pomika 5 mest v desno in se rezultat shrani v registar r1</td>
+</tr>
+</tbody>
+</table>
+<h4 id="aritmeti%c4%8dni-pomik-v-levo-in-desno">Aritmetični pomik v levo in desno</h4>
+<p>Logični pomik predpostavlja da je pomikana vrednost nepredznačena a aritmetični pomik upošteva predznak pomikane vrednosti. Razlika med aritmetičnim in logičnim pomikom je vidna edino pri pomiku v desno. Na naslednji slici se jasno vidi kaj se zgodi ko pomikamo število <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><mo>−</mo><mn>4</mn><msub><mo stretchy="false">)</mo><mrow><mo stretchy="false">(</mo><mn>10</mn><mo stretchy="false">)</mo></mrow></msub></mrow><annotation encoding="application/x-tex">(-4)_{(10)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1052em;vertical-align:-0.3551999999999999em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mord">4</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.34480000000000005em;"><span style="top:-2.5198em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mtight">1</span><span class="mord mtight">0</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3551999999999999em;"><span></span></span></span></span></span></span></span></span></span> v desno za dve mesti s logičnim in aritmetičnim pomikom.</p>
+<p align="center">
+    <img  src="file:////home/ratko/Documents/FRI/ARS/Github/ARS/Vaje/Source/figures/shift.svg" width="500">
+</p>
+<p>Logični pomik na mesto zgornjih bitov vedno vstavlja 0, dokler aritmetični pomik v desno vstavlja bit predznaka. V primeru na zgornji sliki, aritmetični pomik vstavlja 1, zato ker je <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo stretchy="false">(</mo><mo>−</mo><mn>4</mn><msub><mo stretchy="false">)</mo><mn>10</mn></msub></mrow><annotation encoding="application/x-tex">(-4)_{10}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mord">4</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> negativno število.</p>
+
+    </body>
+    </html>

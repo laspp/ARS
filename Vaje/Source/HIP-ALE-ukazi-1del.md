@@ -1,7 +1,7 @@
 # 3. Procesor HIP: ALE ukazi (1. del)
 
 ## Uvod 
-Aritmetično logična enota (ALE) izvaja operacije ki ih delimo na:
+Aritmetično logična enota (ALE) lahko izvaja več operacij kot so:
 
 1. Aritmetične operacije: seštevanje (+) in odštevanje (-)
 2. Pomiki: v levo (<<), v desno (>>), logični in aritmetični pomik
@@ -11,7 +11,7 @@ Aritmetično logična enota (ALE) izvaja operacije ki ih delimo na:
 V HIP-u so vsi ukazi 3-operandni razen NOT in LHI, ki sta v resnici 2-operandna ter se pri njima eden od treh operandov ignorira. Glede na vrste operandov v ukazu, HIP razlikujeta dve vrsti ukazov:
 
 1. Vsi operandi so registri
-2. En od treh operandov je takojšnji operand ali konstantna vrednost. V tem primeru je takojšnji operand 16-bitna vrednost, oziroma takojšnji operand ne more biti  vrednost večja kot $2^{16}-1$. U HIPu ukazi te vrste se imajo črku **I** na zadnjem mestu v imenu ukaza. Na primer ADDI, SLLI itn.
+2. En od treh operandov je takojšnji operand ali konstantna vrednost. V tem primeru takojšnji operand mora biti vrednost ki se lahko zapiše s 16 biti. Tisto vrsto ukazov lahko razaznamo po črki **I** (angl. *Intermediate*) u naboru ukazov na primer ADDI, SLLI itn.
 
 <!---
 | Ukaz          | Pomen        | Opis                                                                        |
@@ -20,7 +20,8 @@ V HIP-u so vsi ukazi 3-operandni razen NOT in LHI, ki sta v resnici 2-operandna 
 | OPI Rd, Rs1, TO | rD <- OP(Rs1,TO) |  Prvo se izvaja operacija OPI nad registrom Rs1 in takojšnjim operandom TO a potem se rezultat shrani v registar rD. TO mora biti 16-bitna vrednost. 
 -->
 
-Pogosta napaka pri uporabi ALE ukazov je da se ALE ukazi izvajajo nad podatki v pomilniku. ALE ima edino dostop do registrov v CPE-u in ne more dostopati do pomilnika. Pri uporabi ALE ukazov, podatki v pomilniku se morajo najprej naložiti v registre. Potem, ALE lahko dostopa do vrednosti v registrih in izvaja ukaze. Na koncu, ALE shrani rezultat ukaza v en od registrov. Shranjen rezultat se lahko vporabi v drugem ALE ukazu ali se shrani v pomilnik. Predhodno opisan postopek lahko ilustriramo s naslednjo risbo. Recimo da HIP mora izvajati program podan na desni strani risbe. Na desni strani je podana poenostavljana izvedba programa v HIPu. Najprej se podatka na naslovu A in B prenašata iz pomilnika v registra R1 in R20. Potem ALE izvaja ukaz OP nad registri R1 in R20 in shrani rezultat v registar R31. (OP predstavlja poljubni ALE vkaz). Na koncu se rezultat operacije shrani v pomilnik na naslovu C.
+
+ALE ima edino dostop do registrov CPE-e in sam ne more dostopati do pomilnika. Pri uporabi ALE ukazov, podatki za procesiranje se morajo najprej naložiti iz pomilnika v registre. Potem, ALE lahko dostopa do vrednosti v registrih in izvaja ukaze. Na koncu, ALE shrani rezultat ukaza v en od registrov. Shranjen rezultat se lahko vporabi v drugem ALE ukazu ali se shrani v pomilnik. Predhodno opisan postopek lahko ilustriramo s naslednjo sliko. Recimo da HIP mora izvajati program podan na desni strani slike. Na levi strani slike je podana poenostavljana izvedba programa v HIPu. Najprej se podatka na naslovu A in B prenašata iz pomilnika v registra R1 in R20. Potem ALE izvaja ukaz OP nad registri R1 in R20 in shrani rezultat v registar R31. (OP predstavlja poljubni ALE vkaz). Na koncu se rezultat operacije shrani v pomilnik na naslovu C.
 
 <p align="center">
     <img  src="./figures/ALE.svg" width="1000">
@@ -29,12 +30,12 @@ Pogosta napaka pri uporabi ALE ukazov je da se ALE ukazi izvajajo nad podatki v 
 
 ## Aritmetične operacije
 
-HIP lahko izvaja samo celoštevilično seštevanje in odštevanje in ne podpira množenje in delenje. Množenje in delenje se lahko implementirata s pomočjo uporabe potprograma in uporabe podprtih ALE ukazov.  
+V HIP se lahko izvajata samo celoštevilično seštevanje in odštevanje. HIP ne podpira operacij množenja in delenja. Množenje in delenje se lahko implementirata s pomočjo uporabe potprogramov in uporabe podprtih ALE ukazov.  
 
 #### Primeri za aritmetične vkaze
 
-| Ukaz          | Pomen        | Opis                                                                                                       |
-|---------------|--------------|------------------------------------------------------------------------------------------------------------|
+| Ukaz         | Pomen        | Opis                                                                                                  |
+|---------------|-------------------|------------------------------------------------------------------------------------------------------------|
 | add r1, r2, r3 | r1 <- r2 + r3  | Vrednosti registra r2 se prišteje vrednost  registra r3 in se rezultat seštevanja shrani v registar r1|
 | addi r1, r2, 20  | r1 <- r2 + 20|  Vrednosti registra r2 se prišteje število 20 in se rezultat seštevanja shrani v registar r1 |
 | sub r1, r2, r3 | r1 <- r2 - r3  | Od vrednosti v registru r2 se odšteje vrednost registra r3 in se rezultat shrani v r1|
@@ -47,25 +48,25 @@ Opomba: Pri ukazih addi in subi takojšnji operand mora biti 16-bitna vrednost. 
 addi r1,r0,0x12345678
 ...
 ```
-Po izvajanju ukaza vrednost registra r1 ne bo enaka 0x12345678 ampak bo enaka 0x00005678. Ukaz addi upošteva samo spodnjih 16 bitov !!!
+Po izvajanju ukaza vrednost registra r1 ne bo enaka `0x12345678` ampak bo enaka `0x00005678`. Ukaz addi upošteva samo spodnjih 16 bitov !!!
 
 #### Nepredznačeno seštavanje in odštevanje. 
 
-Ukazi u prejšnjem delu izvajajo predznačeno seštavanje in odštevanje oziroma predpostavljajo da so operandi predznačena števila. V HIPu obstajata tudi nepredznačeno seštevanje i odštevanje. Pri nepredznačenem seštevanju (odštevanju) operandi se posmatrajo kot nepredznačena števila. Poleg tega, obstajata še dve razliki med predznačenim in nepredznačenim seštevanjem (odštevanjem):
+Ukazi v prejšnjem delu so izvajali predznačeno seštavanje in odštevanje, oziroma ukazi predpostavljajo da so operandi predznačena števila. V HIPu obstajata tudi nepredznačeno seštevanje i odštevanje. Pri nepredznačenem seštevanju (odštevanju) operandi se posmatrajo kot nepredznačena števila. Obstajata dve razliki med predznačenim in nepredznačenim seštevanjem (odštevanjem):
 
-1.  Veljavnost pri predznačenem seštevanju določa bit preliva ($V$) a pri nepredznačenem seštevanju bit prenosa na zadnjem bitu $C_{MSB}$
+1.  Veljavnost pri predznačenem seštevanju določa bit preliva ($V$) a pri nepredznačenem seštevanju bit prenosa na zadnjem bitu $C_{MSB}$ (2. vaja !!!!)
 2.  Pri razširitvi predznaka pri takojšnjem naslavljanju. Pri nepredznačenem seštevanju takojšnji operand se razširja sa ničlami a pri predznačenem sa bitom predznaka. 
 
 #### Primeri za nepredznačene aritmetične vkaze
 
 | Ukaz          | Pomen        | Opis                                                                                                       |
 |---------------|--------------|------------------------------------------------------------------------------------------------------------|
-| addu r1, r2, r3 | r1 <- r2 + r3  | Nepredznačeno seštavanje registrov r2 in r3 (Pazi zadnjo črko U u mnemoniku ukaza) |
+| addu r1, r2, r3 | r1 <- r2 + r3  | Nepredznačeno seštavanje registrov r2 in r3 (Opazuj zadnjo črko U u mnemoniku ukaza) |
 | addui r1, r2, 20  | r1 <- r2 + 20|  Nepredznačeno seštavanje registra r2 in takojšnjeg operanda|
 | subu r1, r2, r3 | r1 <- r2 - r3  |  Nepredznačeno odštevanje registra r3 od registra r2|
 | subui r1, r2, 20  | r1 <- r2 - 20|  Nepredznačeno odštevanje takojšnjeg operanda od registra r2|
 
-Prašanje: Koliko znašata vrednost registra r1 in r2?
+Prašanje: Koliko znašata registra r1 in r2 po izvajanju naslednjih ukazov?
 
 ```as
 ...
@@ -73,13 +74,13 @@ addi r1,r0,-1
 addui r2,r0,-1
 ...
 ```
-Odgovor: r1 = 0xFFFF FFFF in r2 = 0x0000FFFF. Namig: Pretvorite (-1) v 16-bitno binarno vrednost v dvojiškem komplementu. 
+Odgovor: r1 = `0xFFFFFFFF` in r2 = `0x0000FFFF`. Namig: Pretvorite (-1) v 16-bitno binarno vrednost v dvojiškem komplementu. 
 
 ## Pomiki 
 
 #### Logični pomik v levo in desno
 
-Pomikanje števila v levo strano za $n$ mest je ekvivaletno množenjem tega števila s $2^n$. Poglejmo na primeru v katerem 8-bitno število s vrednostjo $3$ pomikamo v levo za dva mesti:
+Pomikanje števila v levo strano za $n$ mest je ekvivaletno množenjem tega števila s $2^n$. Oglejmo si primer v katerem 8-bitno število s vrednostjo $3$ pomikamo v levo za dva mesti:
 
 $$
 \begin{aligned}
@@ -89,7 +90,7 @@ A << 2:\quad 0000\:1100\rightarrow 12&
 \end{aligned}\\[10pt]
 $$
 
-Obratno pomikanje števila v desno strano za $n$ mest je ekvivaletno delenjem tega števila s $2^n$. Poglejmo na primeru v katerem 8-bitno število s vrednostjo $40$ pomikamo v desni za tri mesta:
+Obratno pomikanje števila v desno strano za $n$ mest je ekvivaletno delenjem tega števila s $2^n$. Oglejmo si primer v katerem 8-bitno število s vrednostjo $40$ pomikamo v desno za tri mesta:
 
 $$
 \begin{aligned}
@@ -110,13 +111,13 @@ $$
 
 #### Aritmetični pomik v levo in desno
 
-Logični pomik predpostavlja da je pomikana vrednost nepredznačena a aritmetični pomik upošteva predznak pomikane vrednosti. Razlika med aritmetičnim in logičnim pomikom je vidna edino pri pomiku v desno. Na naslednji slici se jasno vidi kaj se zgodi ko pomikamo število $(-4)_{(10)}$ v desno za dve mesti s logičnim in aritmetičnim pomikom.
+Logični pomik predpostavlja da je pomikana vrednost nepredznačena a aritmetični pomik upošteva predznak pomikane vrednosti. Razlika med aritmetičnim in logičnim pomikom je vidna edino pri pomiku v desno. Na naslednji slici se jasno vidi kaj se zgodi ko pomikamo število $(-4)_{(10)}$ v desno za dve mesti s logičnim in s aritmetičnim pomikom.
 
 <p align="center">
     <img  src="./figures/shift.svg" width="500">
 </p>
 
-Logični pomik na mesto zgornjih bitov vedno vstavlja 0, dokler aritmetični pomik v desno vstavlja bit predznaka. V primeru na zgornji sliki, aritmetični pomik vstavlja 1, zato ker je $(-4)_{10}$ negativno število. 
+Logični pomik namesto zgornjih bitov vedno vstavlja 0, dokler aritmetični pomik v desno vstavlja bit predznaka. namesto zgornjih bitov V primeru na zgornji sliki, aritmetični pomik vstavlja 1 namesto zgornjih bitov, zato ker je $(-4)_{10}$ negativno število. 
 
 #### Primeri za ukaze aritmetičnih pomikov
 
@@ -173,11 +174,11 @@ addi r2, r0, 0x8000
 addui r2, r0, 0x8000	
 addi r1, r0, 0x80000000	
 ```
-Prvi ukaz: Ker se izvaja predznačeno seštevanje, HIP bo razširil takojišnji operand $0\texttt{x}8000$ sa bitom predznaka. Torej, v $r2 = r0 + 0\texttt{x}FFFF\:8000=0\texttt{x}FFFF\:8000$. Ne pozabite  vrednost registra $r0$ je vedno enaka $0$.
+Prvi ukaz: Ker se izvaja predznačeno seštevanje, HIP bo razširil takojišnji operand `0x8000` s bitom predznaka. Torej, `r2 = r0 + 0xFFFF8000 = 0xFFFF8000`. Ne pozabite  vrednost registra r0 je vedno enaka $0$.
 
-Drugi ukaz: Ker se izvaja nepredznačeno seštevanje, HIP bo razširil takojišnji operand $0\texttt{x}8000$ sa ničlami. Torej,  $r2 = r0 + 0\texttt{x}0000\:8000=0\texttt{x}0000\:8000$.
+Drugi ukaz: Ker se izvaja nepredznačeno seštevanje, HIP bo razširil takojišnji operand `0x8000` sa ničlami. Torej,  `r2 = r0 + 0x00008000 = 0x00008000`.
 
-Tretji ukaz: Prej smo omenili da takojšnji operand mora biti 16-bitna vrenost, kar ni slučaj v našem primeru. Prevajalnik ne bo javil napake, ampak bo vzel samo spodnjih 16 bitov. Torej $r1 = r0 + 0\texttt{x}0000\:0000=0\texttt{x}0000\:0000$.
+Tretji ukaz: Prej smo omenili da takojšnji operand mora biti 16-bitna vrenost, kar ni slučaj v našem primeru. Prevajalnik ne bo javil napake, ampak bo vzel samo spodnjih 16 bitov. Torej `r1 = r0 + 0x0000\:0000 = 0x00000000`.
 
 Drugi blok ukazov: 
 
@@ -187,7 +188,7 @@ lw r4, A(r0)
 add r5, r3, r4	
 addu r6, r3, r4	
 ```
-Prva dva ukaza bosta naložila vrednost na pomilniški lokaciji A v registrih  r3 in r4. Torej, $r3=r4=0\texttt{x}4000\:0000$. V tretjem ukazu se uporablja predznačeno seštevanje. Kaj se zgodi pri seštevanju registrov r3 in r4? 
+Prva dva ukaza bosta naložila vrednost na pomilniški lokaciji A v registrih  r3 in r4. Torej, `r3=r4=0x40000000`. V tretjem ukazu se uporablja predznačeno seštevanje. Kaj se zgodi pri seštevanju registrov r3 in r4? 
 
 $$
 \begin{aligned}
@@ -207,7 +208,7 @@ addi r7, r0, 2
 slli r7, r7, 1
 slli r7, r7, 1
 ```
-Na koncu izvajanja bloka $r7=8_{(10)}$.
+Na koncu izvajanja bloka `r7=0x00000008`.
 
 Četvrti blok ukazov: 
 
@@ -216,7 +217,7 @@ addi r7, r0, 16
 srli r7, r7, 1
 srli r7, r7, 1
 ```
-Na koncu izvajanja bloka $r7=4_{(10)}$.
+Na koncu izvajanja bloka  `r7=0x00000004`.
 
 Peti blok ukazov: 
 
@@ -226,7 +227,7 @@ srli r9, r8, #1
 srai r10, r8, #1   
 ```
 
-Najprej se v r8 naloži vrednost $(-2)_{(10)}$, torej $r8=(-2)_{(10)}$. Drugi ukaz izvaja logični pomik v desno. Po pomiku bo najvišji bit enak nič, ter je $r9=0\texttt{x}7FFF\:FFFF\:FFFF\:FFFF = (2^{30}-1)_{(10)}$. Tretji ukaz izvaja aritmetični pomik v desno. Po pomiku bo najvišji bit bitu predznaka, ter je $r10=0\texttt{x}7FFF\:FFFF\:FFFF\:FFFF = (-1)_{(10)}$. Če vam ni jasno, pomagajte se s naslednjo sliko:
+Najprej se v r8 naloži vrednost $(-2)_{(10)}$, torej `r8=0xFFFEFFFFE`. Drugi ukaz izvaja logični pomik v desno. Po pomiku bo najvišji bit enak nič, ter je `r9=0x7FFFFFFFFFFFFFFF` = $(2^{30}-1)_{(10)}$. Tretji ukaz izvaja aritmetični pomik v desno. Po pomiku bo najvišji bit bitu predznaka, ter je `r10=0x7FFFFFFFFFFFFFFF` = $(-1)_{(10)}$. Prej opisano lahko predstavimo s naslednjo sliko.
 
 
 <p align="center">
@@ -236,7 +237,7 @@ Najprej se v r8 naloži vrednost $(-2)_{(10)}$, torej $r8=(-2)_{(10)}$. Drugi uk
 
 ## Naloge
 
-#### Naloga 5.1 
+#### Naloga 4.1 
 Od naslova 0x400 naprej se po vrsti nahaja 6 števil:
 
 - STEV1 in STEV2 – 16-bitni števili 2323 in 4343
@@ -294,7 +295,7 @@ SUM16:	.space 2
 		halt
 ``` 
 
-#### Naloga 5.3
+#### Naloga 4.2
 
 Napišite program v zbirnem jeziku za procesor HIP, ki izračuna uteženo vsoto dveh 16-bitnih predznačenih števil, po pravilu:
 
