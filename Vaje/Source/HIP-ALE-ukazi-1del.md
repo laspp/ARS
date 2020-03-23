@@ -48,6 +48,7 @@ Opomba: Pri ukazih addi in subi mora biti takojšnji operand 16-bitna vrednost. 
 addi r1,r0,0x12345678
 ...
 ```
+
 Po izvajanju ukaza vrednost registra r1 ne bo enaka `0x12345678` ampak bo enaka `0x00005678`. Ukaz addi (in večina ukazov tipa 2) upošteva samo spodnjih 16 bitov takojšnjega operanda!
 
 ### Nepredznačeno seštevanje in odštevanje
