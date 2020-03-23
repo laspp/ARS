@@ -61,8 +61,8 @@ Ukazi v prejšnjem delu so izvajali predznačeno seštavanje in odštevanje, ozi
 
 | Ukaz          | Pomen        | Opis                                                                                                       |
 |---------------|--------------|------------------------------------------------------------------------------------------------------------|
-| addu r1, r2, r3 | r1 <- r2 + r3  | Nepredznačeno seštavanje registrov r2 in r3 (Opazuj zadnjo črko U u mnemoniku ukaza) |
-| addui r1, r2, 20  | r1 <- r2 + 20|  Nepredznačeno seštavanje registra r2 in takojšnjeg operanda|
+| addu r1, r2, r3 | r1 <- r2 + r3  | Nepredznačeno seštevanje registrov r2 in r3 (Opazuj zadnjo črko U u mnemoniku ukaza) |
+| addui r1, r2, 20  | r1 <- r2 + 20|  Nepredznačeno seštevanje registra r2 in takojšnjeg operanda|
 | subu r1, r2, r3 | r1 <- r2 - r3  |  Nepredznačeno odštevanje registra r3 od registra r2|
 | subui r1, r2, 20  | r1 <- r2 - 20|  Nepredznačeno odštevanje takojšnjeg operanda od registra r2|
 
