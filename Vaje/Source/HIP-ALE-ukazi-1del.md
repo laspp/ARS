@@ -9,10 +9,10 @@ Aritmetično logična enota (ALE) lahko izvaja več operacij, kot so:
 3. Logične operacije: bitni IN (&), bitni ALI(|), bitni eksluzivni ALI(^), bitna negacija (~)
 4. set operacije ali operacije primerjanja: enako (==), različno (!=), večje (>), manjše (<)
 
-V HIP-u so vsi ukazi 3-operandni razen NOT in LHI, ki sta v resnici 2-operandna ter se pri njima eden od treh operandov ignorira. Glede na vrste operandov v ukazu, HIP razlikujeta dve vrsti ukazov:
+V HIP-u so vsi ukazi 3-operandni razen NOT in LHI, ki sta v resnici 2-operandna ter se pri njima eden od treh operandov ignorira. Glede na vrste operandov v ukazu, se v HIP razlikujeta dve vrsti ukazov:
 
 1. Vsi operandi so registri
-2. En od treh operandov je takojšnji operand ali konstantna vrednost. V tem primeru mora biti takojšnji operand vrednost ki se lahko zapiše s 16 biti. Tisto vrsto ukazov lahko razpoznamo po črki **I** (angl. *immediate*) u naboru ukazov na primer ADDI, SLLI itn.
+2. En od treh operandov je takojšnji operand ali konstantna vrednost. V tem primeru mora biti takojšnji operand vrednost ki se lahko zapiše s 16 biti. Tisto vrsto ukazov lahko razpoznamo po črki **I** (angl. *immediate*) v naboru ukazov, na primer ADDI, SLLI itn.
 
 <!---
 | Ukaz          | Pomen        | Opis                                                                        |
@@ -22,7 +22,7 @@ V HIP-u so vsi ukazi 3-operandni razen NOT in LHI, ki sta v resnici 2-operandna 
 -->
 
 
-ALE ima dostop samo do registrov CPE in ne more dostopati do pomilnika. Pri uporabi ALE ukazov se morajo podatki za procesiranje najprej naložiti iz pomilnika v registre. Potem lahko ALE dostopa do vrednosti v registrih in izvaja ukaze. Na koncu ALE shrani rezultat ukaza v enega od registrov. Shranjen rezultat se lahko uporabi v drugem ALE ukazu ali pa se shrani v pomilnik. Predhodno opisan postopek lahko ilustriramo z naslednjo sliko. Recimo, da HIP izvaja program podan na desni strani slike. Na levi strani slike je podana poenostavljana izvedba programa v HIPu. Najprej se podatka na naslovu A in B preneseta iz pomilnika v registra R1 in R20. Potem ALE izvede ukaz OP nad registri R1 in R20 in shrani rezultat v register R31. (OP predstavlja poljubni ALE ukaz). Na koncu se rezultat operacije shrani v pomilnik z naslovom C.
+ALE ima dostop samo do registrov CPE in ne more dostopati do pomilnika. Pri uporabi ALE ukazov se morajo podatki za procesiranje najprej naložiti iz pomilnika v registre. Potem lahko ALE dostopa do vrednosti v registrih in izvaja ukaze. Na koncu ALE shrani rezultat ukaza v enega od registrov. Shranjen rezultat se lahko uporabi v drugem ALE ukazu, ali pa se shrani v pomilnik. Predhodno opisan postopek lahko ilustriramo z naslednjo sliko. Recimo, da HIP izvaja program podan na desni strani slike. Na levi strani slike je podana poenostavljana izvedba programa v HIPu. Najprej se podatka na naslovu A in B preneseta iz pomilnika v registra R1 in R20. Potem ALE izvede ukaz OP nad registroma R1 in R20 in shrani rezultat v register R31. (OP predstavlja poljubni ALE ukaz). Na koncu se rezultat operacije shrani v pomilnik z naslovom C.
 
 <p align="center">
     <img  src="./figures/ALE.svg" width="1000">
@@ -30,7 +30,7 @@ ALE ima dostop samo do registrov CPE in ne more dostopati do pomilnika. Pri upor
 
 ## Aritmetične operacije
 
-V HIP se lahko izvajata samo celoštevilično seštevanje in odštevanje. HIP ne podpira operacij množenja in deljenja. Množenje in deljenje se lahko implementirata s pomočjo uporabe podprogramov in uporabe podprtih ALE ukazov.  
+V HIP se lahko izvajata samo celoštevilsko seštevanje in odštevanje. HIP ne podpira operacij množenja in deljenja. Množenje in deljenje se lahko implementirata s pomočjo uporabe podprogramov in uporabe podprtih ALE ukazov.  
 
 ### Primeri za aritmetične ukaze
 
@@ -97,7 +97,7 @@ $$
 \begin{aligned}
 B:\quad 0010\:1000 \rightarrow 40&\\
 \hline\\[-3pt]
-B >> 3:\quad 0000\:0011\rightarrow \,\,5&
+B >> 3:\quad 0000\:0101\rightarrow \,\,5&
 \end{aligned}\\[10pt]
 $$
 
@@ -124,8 +124,6 @@ Logični pomik na mesto zgornjih bitov vedno vstavlja 0, aritmetični pomik v de
 
 | Ukaz          | Pomen        | Opis                                                                                                       |
 |---------------|--------------|------------------------------------------------------------------------------------------------------------|
-| sla r1, r2, r3| r1 <- r2 << r3 | Aritmetični pomik v levo (črka "A" v mnemoniku)|
-| slai r1, r2, 5| r1 <- r2 << 5  | Aritmetični pomik v levo s takojšnjim operandom|
 | sra r1, r2, r3 | r1 <- r2 >> r3| Aritmetični pomik v desno (črka "A" v mnemoniku) |
 | srai r1, r2, 5 | r1 <- r2 >> 5|  Aritmetični pomik v levo s takojšnjim operandom |
 
@@ -231,7 +229,7 @@ srli r9, r8, #1
 srai r10, r8, #1
 ```
 
-Najprej se v r8 naloži vrednost $(-2)_{(10)}$, torej `r8=0xFFFEFFFFE`. Drugi ukaz izvaja logični pomik v desno. Po pomiku bo najvišji bit enak nič, ker je `r9=0x7FFFFFFFFFFFFFFF` = $(2^{30}-1)_{(10)}$. Tretji ukaz izvaja aritmetični pomik v desno. Po pomiku bo najvišji bit enak bitu predznaka, ker je `r10=0x7FFFFFFFFFFFFFFF` = $(-1)_{(10)}$. Prej opisano lahko predstavimo z naslednjo sliko.
+Najprej se v r8 naloži vrednost $(-2)_{(10)}$, torej `r8=0xFFFF FFFE`. Drugi ukaz izvaja logični pomik v desno. Po pomiku bo najvišji bit enak nič, ker je `r9=0x7FFF FFFF` = $(2^{31}-1)_{(10)}$. Tretji ukaz izvaja aritmetični pomik v desno. Po pomiku bo najvišji bit enak bitu predznaka, ker je `r10=0xFFFF FFFF` = $(-1)_{(10)}$. Prej opisano lahko predstavimo z naslednjo sliko.
 
 <p align="center">
     <img  src="./figures/shift_exem.svg" width="700">
