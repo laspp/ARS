@@ -1,27 +1,27 @@
 # 3. Procesor HIP: ALE ukazi (1. del)
 
 ## Uvod 
-Aritmetično logična enota (ALE) lahko izvaja več operacij kot so:
+Aritmetično logična enota (ALE) lahko izvaja več operacij, kot so:
 
 1. Aritmetične operacije: seštevanje (+) in odštevanje (-)
 2. Pomiki: v levo (<<), v desno (>>), logični in aritmetični pomik
 3. Logične operacije: bitni IN (&), bitni ALI(|), bitni eksluzivni ALI(^), bitna negacija (~)
-4. set operacije ali operacije primerjanja: enako (=), različno (!=), večje (>), manjše (<)
+4. set operacije ali operacije primerjanja: enako (==), različno (!=), večje (>), manjše (<)
 
 V HIP-u so vsi ukazi 3-operandni razen NOT in LHI, ki sta v resnici 2-operandna ter se pri njima eden od treh operandov ignorira. Glede na vrste operandov v ukazu, HIP razlikujeta dve vrsti ukazov:
 
 1. Vsi operandi so registri
-2. En od treh operandov je takojšnji operand ali konstantna vrednost. V tem primeru takojšnji operand mora biti vrednost ki se lahko zapiše s 16 biti. Tisto vrsto ukazov lahko razaznamo po črki **I** (angl. *Intermediate*) u naboru ukazov na primer ADDI, SLLI itn.
+2. En od treh operandov je takojšnji operand ali konstantna vrednost. V tem primeru mora biti takojšnji operand vrednost ki se lahko zapiše s 16 biti. Tisto vrsto ukazov lahko razpoznamo po črki **I** (angl. *immediate*) u naboru ukazov na primer ADDI, SLLI itn.
 
 <!---
 | Ukaz          | Pomen        | Opis                                                                        |
 |---------------|--------------|-----------------------------------------------------------------------------|
-| OP Rd, Rs1, Rs2 | rD <- OP(Rs1,Rs2)  | Prvo se izvaja operacija OP nad registroma Rs1 in Rs2 a potem se rezultat shrani v registar rD |
-| OPI Rd, Rs1, TO | rD <- OP(Rs1,TO) |  Prvo se izvaja operacija OPI nad registrom Rs1 in takojšnjim operandom TO a potem se rezultat shrani v registar rD. TO mora biti 16-bitna vrednost. 
+| OP Rd, Rs1, Rs2 | rD <- OP(Rs1,Rs2)  | Najprej se izvede operacija OP nad registroma Rs1 in Rs2; potem se rezultat shrani v register rD |
+| OPI Rd, Rs1, TO | rD <- OP(Rs1,TO) |  Najprej se izvede operacija OPI nad registrom Rs1 in takojšnjim operandom TO; potem se rezultat shrani v register rD. TO mora biti 16-bitna vrednost. 
 -->
 
 
-ALE ima edino dostop do registrov CPE-e in sam ne more dostopati do pomilnika. Pri uporabi ALE ukazov, podatki za procesiranje se morajo najprej naložiti iz pomilnika v registre. Potem, ALE lahko dostopa do vrednosti v registrih in izvaja ukaze. Na koncu, ALE shrani rezultat ukaza v en od registrov. Shranjen rezultat se lahko vporabi v drugem ALE ukazu ali se shrani v pomilnik. Predhodno opisan postopek lahko ilustriramo s naslednjo sliko. Recimo da HIP mora izvajati program podan na desni strani slike. Na levi strani slike je podana poenostavljana izvedba programa v HIPu. Najprej se podatka na naslovu A in B prenašata iz pomilnika v registra R1 in R20. Potem ALE izvaja ukaz OP nad registri R1 in R20 in shrani rezultat v registar R31. (OP predstavlja poljubni ALE vkaz). Na koncu se rezultat operacije shrani v pomilnik na naslovu C.
+ALE ima dostop samo do registrov CPE in ne more dostopati do pomilnika. Pri uporabi ALE ukazov se morajo podatki za procesiranje najprej naložiti iz pomilnika v registre. Potem lahko ALE dostopa do vrednosti v registrih in izvaja ukaze. Na koncu ALE shrani rezultat ukaza v enega od registrov. Shranjen rezultat se lahko uporabi v drugem ALE ukazu ali pa se shrani v pomilnik. Predhodno opisan postopek lahko ilustriramo z naslednjo sliko. Recimo, da HIP izvaja program podan na desni strani slike. Na levi strani slike je podana poenostavljana izvedba programa v HIPu. Najprej se podatka na naslovu A in B preneseta iz pomilnika v registra R1 in R20. Potem ALE izvede ukaz OP nad registri R1 in R20 in shrani rezultat v register R31. (OP predstavlja poljubni ALE ukaz). Na koncu se rezultat operacije shrani v pomilnik z naslovom C.
 
 <p align="center">
     <img  src="./figures/ALE.svg" width="1000">
@@ -30,9 +30,9 @@ ALE ima edino dostop do registrov CPE-e in sam ne more dostopati do pomilnika. P
 
 ## Aritmetične operacije
 
-V HIP se lahko izvajata samo celoštevilično seštevanje in odštevanje. HIP ne podpira operacij množenja in delenja. Množenje in delenje se lahko implementirata s pomočjo uporabe potprogramov in uporabe podprtih ALE ukazov.  
+V HIP se lahko izvajata samo celoštevilično seštevanje in odštevanje. HIP ne podpira operacij množenja in deljenja. Množenje in deljenje se lahko implementirata s pomočjo uporabe podprogramov in uporabe podprtih ALE ukazov.  
 
-#### Primeri za aritmetične vkaze
+#### Primeri za aritmetične ukaze
 
 | Ukaz         | Pomen        | Opis                                                                                                  |
 |---------------|-------------------|------------------------------------------------------------------------------------------------------------|
@@ -66,7 +66,7 @@ Ukazi v prejšnjem delu so izvajali predznačeno seštavanje in odštevanje, ozi
 | subu r1, r2, r3 | r1 <- r2 - r3  |  Nepredznačeno odštevanje registra r3 od registra r2|
 | subui r1, r2, 20  | r1 <- r2 - 20|  Nepredznačeno odštevanje takojšnjeg operanda od registra r2|
 
-Prašanje: Koliko znašata registra r1 in r2 po izvajanju naslednjih ukazov?
+Vprašanje: Koliko znašata registra r1 in r2 po izvajanju naslednjih ukazov?
 
 ```as
 ...
