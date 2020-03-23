@@ -178,16 +178,16 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1"
      inkscape:cx="596.50958"
-     inkscape:cy="343.09686"
+     inkscape:cy="263.09686"
      inkscape:document-units="mm"
      inkscape:current-layer="g6193"
      showgrid="false"
      showguides="false"
      inkscape:guide-bbox="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1016"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-width="1280"
+     inkscape:window-height="738"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata5">
@@ -197,7 +197,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -732,12 +732,12 @@
            x="243.79796"
            sodipodi:role="line">   .space 8</tspan><tspan
            id="tspan5957"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Courier New';-inkscape-font-specification:'Courier New';stroke-width:0.26458332;fill:#ff0000;fill-opacity:1"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Courier New';-inkscape-font-specification:'Courier New';fill:#ff0000;fill-opacity:1;stroke-width:0.26458332"
            y="161.9749"
            x="243.79796"
            sodipodi:role="line">A: .space 4</tspan><tspan
            id="tspan5943"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Courier New';-inkscape-font-specification:'Courier New';stroke-width:0.26458332;fill:#0000ff;fill-opacity:1"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Courier New';-inkscape-font-specification:'Courier New';fill:#0000ff;fill-opacity:1;stroke-width:0.26458332"
            y="176.08601"
            x="243.79796"
            sodipodi:role="line">B: .space 4</tspan><tspan
@@ -747,7 +747,7 @@
            x="243.79796"
            sodipodi:role="line">   .space 64</tspan><tspan
            id="tspan5955"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Courier New';-inkscape-font-specification:'Courier New';stroke-width:0.26458332;fill:#004e00;fill-opacity:1"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Courier New';-inkscape-font-specification:'Courier New';fill:#004e00;fill-opacity:1;stroke-width:0.26458332"
            y="204.30823"
            x="243.79796"
            sodipodi:role="line">C: .space 4</tspan><tspan
@@ -785,7 +785,7 @@
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Courier New';-inkscape-font-specification:'Courier New';stroke-width:0.26458332"
            y="303.086"
            x="243.79796"
-           sodipodi:role="line">   hlt</tspan><tspan
+           sodipodi:role="line">   halt</tspan><tspan
            id="tspan5903"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Courier New';-inkscape-font-specification:'Courier New';stroke-width:0.26458332"
            y="317.19711"
