@@ -1,4 +1,4 @@
-# 3. Procesor HIP: ALE ukazi (1. del)
+# 4. Procesor HIP: ALE ukazi (1. del)
 
 ## Uvod
 
@@ -27,6 +27,10 @@ ALE ima dostop samo do registrov CPE in ne more dostopati do pomilnika. Pri upor
 <p align="center">
     <img  src="./figures/ALE.svg" width="1000">
 </p>
+
+<br/>
+<br/>
+
 
 ## Aritmetične operacije
 
@@ -57,6 +61,11 @@ Ukazi v prejšnjem delu so izvajali predznačeno seštevanje in odštevanje - ti
 
 1. Veljavnost pri predznačenem seštevanju določa bit preliva ($V$), pri nepredznačenem seštevanju pa bit prenosa na zadnjem bitu $C_{MSB}$ (glejte 2. vajo).
 2. Razširitvi predznaka pri takojšnjem naslavljanju: pri nepredznačenem seštevanju se takojšnji operand razširja z ničlami, pri predznačenem pa z bitom predznaka (0 za pozitivna in 1 za negativna števila).
+
+
+<br/>
+<br/>
+
 
 #### Primeri za nepredznačene aritmetične ukaze
 
@@ -234,6 +243,11 @@ Najprej se v r8 naloži vrednost $(-2)_{(10)}$, torej `r8=0xFFFF FFFE`. Drugi uk
 <p align="center">
     <img  src="./figures/shift_exem.svg" width="700">
 </p>
+
+
+<br/>
+<br/>
+
 
 ## Naloge
 
