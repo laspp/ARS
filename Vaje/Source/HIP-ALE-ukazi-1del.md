@@ -110,7 +110,7 @@ $$
 | srl r1, r2, r3 | r1 <- r2 >> r3| Vrednost registra r2 se pomakne za r3 mest v desno in rezultat se shrani v register r1 |
 | srli r1, r2, 5 | r1 <- r2 >> 5| Vrednost registra r2 se pomakne za 5 mest v desno in rezultat se shrani v register r1 |
 
-### Aritmetični pomik v levo in desno
+### Aritmetični pomik v desno
 
 Logični pomik predpostavlja, da je pomikana vrednost nepredznačena, aritmetični pomik pa upošteva predznak pomikane vrednosti. Razlika med aritmetičnim in logičnim pomikom je vidna samo pri pomiku v desno. Na naslednji sliki se jasno vidi, kaj se zgodi, ko pomikamo število $(-4)_{(10)}$ v desno za dve mesti z logičnim in z aritmetičnim pomikom.
 
@@ -125,7 +125,7 @@ Logični pomik na mesto zgornjih bitov vedno vstavlja 0, aritmetični pomik v de
 | Ukaz          | Pomen        | Opis                                                                                                       |
 |---------------|--------------|------------------------------------------------------------------------------------------------------------|
 | sra r1, r2, r3 | r1 <- r2 >> r3| Aritmetični pomik v desno (črka "A" v mnemoniku) |
-| srai r1, r2, 5 | r1 <- r2 >> 5|  Aritmetični pomik v levo s takojšnjim operandom |
+| srai r1, r2, 5 | r1 <- r2 >> 5|  Aritmetični pomik v desno s takojšnjim operandom |
 
 #### Primer izvajanja ALE ukazov v zbirnem jeziku HIP
 
